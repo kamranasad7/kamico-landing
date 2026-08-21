@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html, body { margin: 0; padding: 0; background: #0b0b0d; }
+html { scroll-behavior: smooth; }
+body { font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--text, #f4f3f1); text-decoration: none; transition: color 0.2s ease; }
+a:hover { color: var(--accent-ink, #c7f43a); }
+::selection { background: var(--accent, #c7f43a); color: #0b0b0d; }
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; --accent-soft: {{ accentSoft }}; --accent-ink: {{ accentInk }}; --bg: {{ th.bg }}; --text: {{ th.text }}; --muted: {{ th.muted }}; --muted2: {{ th.muted2 }}; --faint: {{ th.faint }}; --faint2: {{ th.faint2 }}; --chip: {{ th.chip }}; --line: {{ th.line }}; --line2: {{ th.line2 }}; --line3: {{ th.line3 }}; --panel: {{ th.panel }}; --panel2: {{ th.panel2 }}; --header-bg: {{ th.headerBg }}; --shadow: {{ th.shadow }}; background: var(--bg, #0b0b0d); color: var(--text, #f4f3f1); min-height: 100vh; overflow-x: hidden; transition: background 0.3s ease, color 0.3s ease">
+
+  <header style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 18px 40px; background: var(--header-bg, rgba(11,11,13,0.82)); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line, rgba(255,255,255,0.08))">
+    <a href="#top" style="display: flex; align-items: center; gap: 12px">
+      <div role="img" aria-label="KamiCo" style="height: 34px; width: {{ navMarkW }}px; background-image: url({{ wordmarkSrc }}); background-size: contain; background-position: left center; background-repeat: no-repeat"></div>
+    </a>
+    <nav style="display: flex; align-items: center; gap: 34px; font-size: 14px; letter-spacing: 0.01em">
+      <a href="#games">Games</a>
+      <a href="#studio">Studio</a>
+      <a href="#numbers">Reach</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 14px">
+      <button onClick="{{ toggleTheme }}" aria-label="Toggle light or dark mode" style="cursor: pointer; background: none; border: 1px solid var(--line2, rgba(255,255,255,0.14)); border-radius: 999px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--text, #f4f3f1); transition: border-color 0.2s ease" style-hover="border-color: var(--line3, rgba(255,255,255,0.24))">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4.5" fill="currentColor" stroke="none"></circle>
+            <line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line>
+            <line x1="4.9" y1="4.9" x2="7" y2="7"></line><line x1="17" y1="17" x2="19.1" y2="19.1"></line>
+            <line x1="4.9" y1="19.1" x2="7" y2="17"></line><line x1="17" y1="7" x2="19.1" y2="4.9"></line>
+          </svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <mask id="kc-moon"><rect width="24" height="24" fill="white"></rect><circle cx="16" cy="8" r="8" fill="black"></circle></mask>
+            <circle cx="12" cy="12" r="9" fill="currentColor" mask="url(#kc-moon)"></circle>
+          </svg>
+        </sc-if>
+      </button>
+      <a href="https://play.google.com/store/apps/developer?id=KamiCo" target="_blank" rel="noopener" style="padding: 11px 20px; border-radius: 999px; background: var(--accent, #c7f43a); color: #0b0b0d; font-weight: 700; font-size: 14px; transition: filter 0.2s ease" style-hover="filter: brightness(1.12)">Get on Google Play</a>
+    </div>
+  </header>
+
+  <section id="top" style="position: relative; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; padding: 96px 40px 88px; max-width: 1440px; margin: 0 auto">
+    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 28px">
+      <h1 style="margin: 0; font-size: 80px; line-height: 0.94; letter-spacing: -0.035em; font-weight: 700; text-wrap: balance">Games worth<br>your <span style="color: var(--accent-ink, #c7f43a)">pocket.</span></h1>
+      <p style="margin: 0; max-width: 32ch; font-size: 19px; line-height: 1.5; color: var(--muted, #a5a1ab); text-wrap: pretty">KamiCo is an independent game studio. Easy to pick up, hard to put down, free on Google Play.</p>
+      <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+        <a href="#games" style="padding: 15px 26px; border-radius: 12px; background: var(--accent, #c7f43a); color: #0b0b0d; font-weight: 700; font-size: 15px; transition: filter 0.2s ease" style-hover="filter: brightness(1.12)">See the games</a>
+        <a href="#studio" style="padding: 15px 26px; border-radius: 12px; border: 1px solid var(--line2, rgba(255,255,255,0.18)); font-weight: 500; font-size: 15px; transition: border-color 0.2s ease" style-hover="border-color: var(--accent-ink, #c7f43a)">About the studio</a>
+      </div>
+      <div style="display: flex; gap: 40px; padding-top: 12px">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--text, #f4f3f1)">30K+</span>
+          <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Downloads</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--text, #f4f3f1)">4.4★</span>
+          <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">200 reviews</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--text, #f4f3f1)">2020</span>
+          <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Shipping since</span>
+        </div>
+      </div>
+    </div>
+    <div style="position: relative; display: flex; justify-content: center; align-items: center">
+      <div style="position: absolute; width: 420px; height: 420px; border-radius: 999px; background: var(--accent-soft, rgba(199,244,58,0.16)); filter: blur(90px)"></div>
+      <div style="position: relative; width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 14px">
+        <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 22px; border: 1px solid var(--line2, rgba(255,255,255,0.14)); background: var(--panel, #141417); box-shadow: var(--shadow, 0 40px 90px rgba(0,0,0,0.6)); overflow: hidden; padding: 8px; display: flex">
+          <div style="width: 100%; height: 100%; border-radius: 16px; background-color: #17171b; background-size: cover; background-position: center; background-image: url(https://play-lh.googleusercontent.com/dWfqRhYm2phSgqgJ1Av6NVXsy_6rhBRkTfGdD6wTXn1F_GkZL3N6DAUnRt0JBrLOK3qqtfWthEvBQpa0dI0d=w1052-h592)"></div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">
+          <span>Space Impact 3: Revamped — stage 1</span>
+          <span>Android</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="games" style="padding: 104px 40px; max-width: 1440px; margin: 0 auto">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; padding-bottom: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink, #c7f43a)">01 — Lineup</span>
+        <h2 style="margin: 0; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700">The lineup so far</h2>
+      </div>
+      <p style="margin: 0; max-width: 34ch; font-size: 16px; line-height: 1.55; color: var(--muted2, #8f8b93); text-wrap: pretty">Playable offline and light on your data. Android today, more platforms later.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px">
+      <sc-for list="{{ games }}" as="game" hint-placeholder-count="5">
+        <a href="{{ game.url }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; border: 1px solid var(--line, rgba(255,255,255,0.08)); border-radius: 22px; overflow: hidden; background: var(--panel, #121215); transition: border-color 0.2s ease" style-hover="border-color: var(--line3, rgba(255,255,255,0.24))">
+          <div style="aspect-ratio: 16 / 9; background-color: #17171b; background-size: cover; background-position: center; background-image: url({{ game.shot }})"></div>
+          <div style="display: flex; gap: 18px; padding: 22px 24px 26px">
+            <div style="flex: none; width: 64px; height: 64px; border-radius: 16px; background-color: #1c1c21; background-size: cover; background-image: url({{ game.icon }})"></div>
+            <div style="display: flex; flex-direction: column; gap: 10px; flex: 1">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px">
+                <h3 style="margin: 0; font-size: 24px; letter-spacing: -0.02em; font-weight: 700">{{ game.title }}</h3>
+                <span style="font-size: 11px; color: var(--faint, #78747d)">{{ game.installs }}</span>
+              </div>
+              <p style="margin: 0; font-size: 15px; line-height: 1.5; color: var(--muted2, #918d97); text-wrap: pretty">{{ game.blurb }}</p>
+              <div style="display: flex; gap: 8px; padding-top: 6px; flex-wrap: wrap">
+                <span style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--chip, #b9b5bd); border: 1px solid var(--line2, rgba(255,255,255,0.14)); border-radius: 999px; padding: 5px 10px">{{ game.genre }}</span>
+                <span style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--chip, #b9b5bd); border: 1px solid var(--line2, rgba(255,255,255,0.14)); border-radius: 999px; padding: 5px 10px">{{ game.sessions }}</span>
+                <span style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--chip, #b9b5bd); border: 1px solid var(--line2, rgba(255,255,255,0.14)); border-radius: 999px; padding: 5px 10px">{{ game.rated }}</span>
+              </div>
+              <span style="padding-top: 8px; font-size: 14px; font-weight: 500; color: var(--accent-ink, #c7f43a)">Google Play →</span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="numbers" style="border-top: 1px solid var(--line, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); background: var(--panel2, #101013)">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1440px; margin: 0 auto">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 56px 32px; border-right: 1px solid var(--line, rgba(255,255,255,0.08))">
+        <span style="font-size: 44px; letter-spacing: -0.03em; font-weight: 700">30K+</span>
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Downloads to date</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 56px 32px; border-right: 1px solid var(--line, rgba(255,255,255,0.08))">
+        <span style="font-size: 44px; letter-spacing: -0.03em; font-weight: 700">4.4★</span>
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Across 200 reviews</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 56px 32px; border-right: 1px solid var(--line, rgba(255,255,255,0.08))">
+        <span style="font-size: 44px; letter-spacing: -0.03em; font-weight: 700">2</span>
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Games published</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 56px 32px">
+        <span style="font-size: 44px; letter-spacing: -0.03em; font-weight: 700">Free</span>
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint, #78747d)">Both titles, ad-supported</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio" style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 104px 40px; max-width: 1440px; margin: 0 auto">
+    <div style="display: flex; flex-direction: column; gap: 24px">
+      <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink, #c7f43a)">02 — Studio</span>
+      <h2 style="margin: 0; font-size: 46px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; text-wrap: balance">Independent, small, and in no hurry</h2>
+      <p style="margin: 0; font-size: 17px; line-height: 1.6; color: var(--muted, #a5a1ab); text-wrap: pretty">KamiCo has been publishing since 2020, starting with a nostalgic revival of the 2D space shooter a lot of us grew up on. We self-publish, keep our games light, and only ship what we'd play ourselves.</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding-top: 8px">
+        <div style="display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--accent-ink, #c7f43a); padding-left: 16px">
+          <span style="font-size: 15px; font-weight: 700">Play offline</span>
+          <span style="font-size: 14px; line-height: 1.5; color: var(--muted2, #8f8b93)">No account, no sign-up, no connection required.</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--accent-ink, #c7f43a); padding-left: 16px">
+          <span style="font-size: 15px; font-weight: 700">Free to play</span>
+          <span style="font-size: 14px; line-height: 1.5; color: var(--muted2, #8f8b93)">Both titles are free downloads, supported by ads rather than paywalls.</span>
+        </div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+      <div style="aspect-ratio: 16 / 9; border-radius: 16px; border: 1px solid var(--line, rgba(255,255,255,0.1)); background-size: cover; background-position: center; background-image: url(https://play-lh.googleusercontent.com/j_3sZKFp4NkYNc6WN7YITBgoRKEtl6hkXgBiQP2W8Tl3dwHdWtNNhxIEM5RdW3u-0JqfA76GUitfkoGJHbCN0g=w1052-h592)"></div>
+      <div style="aspect-ratio: 16 / 9; border-radius: 16px; border: 1px solid var(--line, rgba(255,255,255,0.1)); background-size: cover; background-position: center; background-image: url(https://play-lh.googleusercontent.com/vXtFpr2CwRRpvdBcrDEWbeeIQTeS9e-0bo3fvVbgca8809QEz_dP9PRu2tRR21NXnkbNyiUUz5Qn_rQVsfnVjYs=s0)"></div>
+      <div style="aspect-ratio: 16 / 9; border-radius: 16px; border: 1px solid var(--line, rgba(255,255,255,0.1)); background-size: cover; background-position: center; background-image: url(https://play-lh.googleusercontent.com/6jR0OBTkdeJIHasE8f3rhW5fHiLMBVhnkj6dWsTU3DbiObRq5eP65epkH5WlJITtU-UYhXRz07Tj3TDJujUM=w1052-h592)"></div>
+      <div style="aspect-ratio: 16 / 9; border-radius: 16px; border: 1px solid var(--line, rgba(255,255,255,0.1)); background-size: cover; background-position: center; background-image: url(https://play-lh.googleusercontent.com/AvxEjBXBJ6jHJEM0KceoI2gKiVQL13Ax7qP0cUfigsi1TuqvVQflR8K3fK594fkxMwBbfP-VyTHKURGKjB_bviI=s0)"></div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding: 0 40px 104px; max-width: 1440px; margin: 0 auto">
+    <div style="border: 1px solid var(--line, rgba(255,255,255,0.08)); border-radius: 24px; background: var(--panel, #121215); padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink, #c7f43a)">03 — Contact</span>
+        <h2 style="margin: 0; font-size: 38px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 700; text-wrap: balance">Bug reports, press, or just say hi</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.55; color: var(--muted2, #8f8b93); text-wrap: pretty">Player support and press enquiries go to the same inbox, and it's read by the person who made the game.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <a href="mailto:kamranasad7@gmail.com" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 4px; border-top: 1px solid var(--line, rgba(255,255,255,0.09)); transition: padding 0.2s ease" style-hover="padding-left: 10px">
+          <span style="font-size: 18px; font-weight: 500">Player support</span>
+          <span style="font-size: 12px; color: var(--faint, #78747d)">kamranasad7@gmail.com</span>
+        </a>
+        <a href="https://play.google.com/store/apps/developer?id=KamiCo" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 4px; border-top: 1px solid var(--line, rgba(255,255,255,0.09)); transition: padding 0.2s ease" style-hover="padding-left: 10px">
+          <span style="font-size: 18px; font-weight: 500">Developer page</span>
+          <span style="font-size: 12px; color: var(--faint, #78747d)">Google Play →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid var(--line, rgba(255,255,255,0.08)); padding: 64px 40px 40px">
+    <div style="max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px">
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <div role="img" aria-label="KamiCo" style="width: 44px; height: 44px; border-radius: 12px; background-image: url({{ iconSrc }}); background-size: cover"></div>
+        <p style="margin: 0; max-width: 26ch; font-size: 14px; line-height: 1.55; color: var(--faint, #78747d)">Independent mobile game studio. Publishing on Google Play since 2020.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px">
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint2, #55525a)">Games</span>
+        <a href="https://play.google.com/store/apps/details?id=com.kamico.si3" target="_blank" rel="noopener">Space Impact 3: Revamped</a>
+        <a href="https://play.google.com/store/apps/details?id=com.kamico.salaryday" target="_blank" rel="noopener">Salary Day</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px">
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint2, #55525a)">Company</span>
+        <a href="#studio">Studio</a>
+        <a href="#numbers">Reach</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px">
+        <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint2, #55525a)">Support</span>
+        <a href="mailto:kamranasad7@gmail.com">Player support</a>
+        <a href="https://play.google.com/store/apps/developer?id=KamiCo" target="_blank" rel="noopener">Developer page</a>
+      </div>
+    </div>
+    <div style="max-width: 1440px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--line, rgba(255,255,255,0.07)); display: flex; justify-content: space-between; gap: 24px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint2, #55525a)">
+      <span>© 2026 KamiCo Interactive</span>
+      <span>Made for small screens</span>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;logoSet&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1&quot;,&quot;2&quot;],&quot;default&quot;:&quot;2&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;}}">
+class Component extends DCLogic {
+  state = { theme: (typeof localStorage !== "undefined" && localStorage.getItem("kamico-theme")) || "dark" };
+  renderVals() {
+    const set = String(this.props.logoSet ?? "2");
+    const light = this.state.theme === "light";
+    const dir = set === "1" ? "assets/logo-1" : "assets/logo-2";
+    const accent = set === "1" ? "#8b5cc9" : "#c7f43a";
+    const accentInk = set === "1" ? (light ? "#6d43a8" : "#a98ce0") : (light ? "#6f9410" : "#c7f43a");
+    const th = light
+      ? { bg: "#f6f5f2", text: "#1d1a22", muted: "#514d57", muted2: "#6b6772", faint: "#7a7680", faint2: "#8d8993", chip: "#514d57", line: "rgba(0,0,0,0.10)", line2: "rgba(0,0,0,0.18)", line3: "rgba(0,0,0,0.34)", panel: "#ffffff", panel2: "#efedea", headerBg: "rgba(246,245,242,0.85)", shadow: "0 40px 90px rgba(0,0,0,0.16)" }
+      : { bg: "#0b0b0d", text: "#f4f3f1", muted: "#a5a1ab", muted2: "#8f8b93", faint: "#78747d", faint2: "#55525a", chip: "#b9b5bd", line: "rgba(255,255,255,0.08)", line2: "rgba(255,255,255,0.14)", line3: "rgba(255,255,255,0.24)", panel: "#121215", panel2: "#101013", headerBg: "rgba(11,11,13,0.82)", shadow: "0 40px 90px rgba(0,0,0,0.6)" };
+    document.body.style.background = th.bg;
+    const wordmark = dir + (light ? "/kamico-light.svg" : "/kamico-dark.svg");
+    const icon = dir + "/kamico-icon.svg";
+    return {
+      accent, accentInk, th,
+      isDark: !light,
+      isLight: light,
+      toggleTheme: () => {
+        const next = light ? "dark" : "light";
+        try { localStorage.setItem("kamico-theme", next); } catch (e) {}
+        this.setState({ theme: next });
+      },
+      accentSoft: set === "1" ? (light ? "rgba(139,92,201,0.22)" : "rgba(139,92,201,0.30)") : (light ? "rgba(199,244,58,0.55)" : "rgba(199,244,58,0.20)"),
+      wordmarkSrc: wordmark,
+      navMarkW: set === "1" ? 93 : 189,
+      iconSrc: icon,
+      games: [
+        {
+          title: "Space Impact 3: Revamped",
+          status: "4.4★ · 200 reviews",
+          installs: "30K+ downloads",
+          genre: "Arcade",
+          sessions: "Single player",
+          rated: "Rated 7+",
+          blurb: "A nostalgic revival of the 2D space shooter: stage bosses with their own weak points, power-ups, extra lives, and a mission objective on every stage.",
+          url: "https://play.google.com/store/apps/details?id=com.kamico.si3",
+          icon: "https://play-lh.googleusercontent.com/qM4358BF15EepgoX6aKQkfLAnu6TFTzffWa_dpDDsFifrPrf452OEH6IX2eRhOLM9nFOg6DEn_ZCLx6dAJnDvA=w240-h240",
+          shot: "https://play-lh.googleusercontent.com/dWfqRhYm2phSgqgJ1Av6NVXsy_6rhBRkTfGdD6wTXn1F_GkZL3N6DAUnRt0JBrLOK3qqtfWthEvBQpa0dI0d=w1052-h592"
+        },
+        {
+          title: "Salary Day",
+          status: "New release",
+          installs: "Board game",
+          genre: "2–4 players",
+          sessions: "Pass and play",
+          rated: "Rated 3+",
+          blurb: "A retro-inspired money board game across a 31-day month. Strike deals, open the mail, dodge surprise bills, and finish payday with the fattest wallet.",
+          url: "https://play.google.com/store/apps/details?id=com.kamico.salaryday",
+          icon: "https://play-lh.googleusercontent.com/fLgJLd0cPUupTlUzhXMIzP2M97ZbFQVjjIe6YK-RldUh4NIEKKHfPZglLDz5lnTdBgxnpIg9r9v1sKVzicak0wU=w240-h240",
+          shot: "https://play-lh.googleusercontent.com/yCwy51G2HI1hJHQyD5psUY1UKTk6zb-smCUyvSI4RcKpoxL-WS7bky9X56N397WTpU7cL90-w1i3tbyhG4DGVw=s0"
+        }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>
