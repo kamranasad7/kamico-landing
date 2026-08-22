@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>KamiCo — Games worth your pocket</title>
+		<meta
+			name="description"
+			content="KamiCo is an independent mobile game studio. Easy to pick up, hard to put down, free on Google Play."
+		/>
+		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="KamiCo" />
+		<meta property="og:title" content="KamiCo — Games worth your pocket" />
+		<meta
+			property="og:description"
+			content="KamiCo is an independent mobile game studio. Easy to pick up, hard to put down, free on Google Play."
+		/>
+		<meta property="og:image" content="%sveltekit.assets%/media/si3-shot.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<script>
+			// Apply the stored theme before first paint so light mode never flashes dark.
+			try {
+				if (localStorage.getItem('kamico-theme') === 'light') {
+					document.documentElement.dataset.theme = 'light';
+				}
+			} catch (e) {}
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

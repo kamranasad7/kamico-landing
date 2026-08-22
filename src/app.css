@@ -1,0 +1,91 @@
+/* Theme tokens from the design export's renderVals(); dark is the default. */
+:root {
+	--accent: #c7f43a;
+	--accent-ink: #c7f43a;
+	--accent-soft: rgba(199, 244, 58, 0.2);
+	--bg: #0b0b0d;
+	--text: #f4f3f1;
+	--muted: #a5a1ab;
+	--muted2: #8f8b93;
+	--faint: #78747d;
+	--faint2: #55525a;
+	--chip: #b9b5bd;
+	--line: rgba(255, 255, 255, 0.08);
+	--line2: rgba(255, 255, 255, 0.14);
+	--line3: rgba(255, 255, 255, 0.24);
+	--panel: #121215;
+	--panel2: #101013;
+	--header-bg: rgba(11, 11, 13, 0.82);
+	--shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+	--gutter: 40px;
+	color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+	--accent-ink: #6f9410;
+	--accent-soft: rgba(199, 244, 58, 0.55);
+	--bg: #f6f5f2;
+	--text: #1d1a22;
+	--muted: #514d57;
+	--muted2: #6b6772;
+	--faint: #7a7680;
+	--faint2: #8d8993;
+	--chip: #514d57;
+	--line: rgba(0, 0, 0, 0.1);
+	--line2: rgba(0, 0, 0, 0.18);
+	--line3: rgba(0, 0, 0, 0.34);
+	--panel: #ffffff;
+	--panel2: #efedea;
+	--header-bg: rgba(246, 245, 242, 0.85);
+	--shadow: 0 40px 90px rgba(0, 0, 0, 0.16);
+	color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	color: var(--text);
+}
+
+a {
+	color: var(--text);
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+a:hover {
+	color: var(--accent-ink);
+}
+
+img {
+	display: block;
+	max-width: 100%;
+}
+
+::selection {
+	background: var(--accent);
+	color: #0b0b0d;
+}
+
+@media (max-width: 768px) {
+	:root {
+		--gutter: 20px;
+	}
+}
