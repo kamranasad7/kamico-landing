@@ -6,8 +6,9 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"preview": "vite preview",
+		"preview": "node scripts/preview.mjs",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"media": "node scripts/optimize-media.mjs",
 		"verify": "node scripts/verify.mjs",
 		"prepare": "svelte-kit sync || echo ''"
 	},

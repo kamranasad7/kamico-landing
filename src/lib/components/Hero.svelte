@@ -25,7 +25,7 @@
 		<div class="orb"></div>
 		<figure>
 			<div class="frame">
-				<img src="/media/si3-shot.png" alt="Space Impact 3: Revamped, stage 1" decoding="async" />
+				<img src="/media/si3-shot.jpg" alt="Space Impact 3: Revamped, stage 1" fetchpriority="high" decoding="async" />
 			</div>
 			<figcaption>
 				<span>Space Impact 3: Revamped — stage 1</span>
