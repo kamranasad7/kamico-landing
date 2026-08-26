@@ -1,39 +1,43 @@
-# Plan — KamiCo landing page
+# Plan — SEO/social metadata, robots + sitemap, JSON-LD, image weight
 
-Greenfield: the repo holds only `design/` (Claude Design export, logo-2 brand, Play artwork). `design/`
-stays an untouched reference; its assets are **copied** into `static/`.
+## Root cause
+1. Origin-dependent metadata sits in `src/app.html` behind `%sveltekit.assets%`, which adapter-static resolves to a
+   *relative* `.` — hence `og:image="./media/si3-shot.png"`, while canonical/`og:url`/robots/sitemap never existed at all.
+2. `static/media/*` are the untouched full-res Play Store originals (up to 1080x2400, 1.1 MB) rendered into 300–670 CSS-px
+   boxes; nothing resizes or re-encodes them → 3.9 MB of images on first desktop load.
 
-## Files to create
-- `package.json` + **`package-lock.json` (committed — `npm ci` fails without it)**, `svelte.config.js`,
-  `vite.config.js`, `tsconfig.json`, `README.md`
-- `src/app.html` — title/description/OG/favicon + inline pre-paint theme script
-- `src/app.css` — reset + `:root` (dark) / `[data-theme="light"]` tokens from the README table
-- `src/lib/theme.svelte.ts` (runes), `src/lib/games.ts` (data lifted from the export's `renderVals()`),
-  `src/lib/components/{Header,ThemeToggle,Hero,Games,GameCard,Numbers,Studio,Contact,Footer}.svelte`
-- `src/routes/+layout.ts` (`export const prerender = true`), `+layout.svelte`, `+page.svelte`
-- `static/logo/*` ← `design/logo/logo-2/`, `static/media/*` ← `design/media/`, `static/favicon.svg`
-- `scripts/verify.mjs` — puppeteer-core driving the installed Chrome
+## Files
+- **new** `src/lib/site.ts` — `SITE_URL = 'https://kamico-landing.vercel.app'` (no trailing slash), `abs()`, `SITEMAP_URL`,
+  `socialCard` (absolute URL + alt + the pixel size the file in `static/media` actually is).
+- **new** `src/lib/components/Seo.svelte` — `<svelte:head>` with canonical, `og:url`, absolute `og:image` + `:width/:height/:alt`,
+  `twitter:image`, and the single `ld+json` block; rendered once from `+layout.svelte`. Its `@graph` = Organization (KamiCo,
+  `SITE_URL`, logo, Play developer `sameAs`) + one `VideoGame` per title built from `games.ts`: name, Play Store `url`,
+  `contentRating` ("Rated 7+/3+"), and `aggregateRating` **only for Space Impact 3** (4.4/200, the sole real figure in the
+  design export — Salary Day is "New release" there, so an invented aggregate would be fake structured data).
+- **new** `src/routes/{robots.txt,sitemap.xml}/+server.ts` — prerendered, bodies derived from `SITE_URL`; the default
+  `prerender.entries` already crawls them, so both land in `build/` with no config change.
+- **new** `scripts/optimize-media.mjs` (+ `npm run media`) — regenerates `static/media/` from the read-only `design/media/`
+  originals via `sips` at the widths actually rendered (card/hero shots 1052 and 800 jpeg q72, studio thumbs 640, icons 128
+  png). Derivatives are committed, so `npm run build` stays tool-free; 748 KB total vs the 900 KB budget.
+- **edit** `src/app.html` (drop the relative `og:image`; keep title/description/favicon/theme script), `games.ts` (new `shot`
+  extension + rating data), `Hero.svelte` (`fetchpriority="high"`, not lazy), `README.md`, and `scripts/verify.mjs`, which
+  imports `SITE_URL` from `src/lib/site.ts` (Node 24 strips types) so the origin stays declared exactly once. `GameCard` and
+  `Studio` need no edit — they read their paths from `games.ts` and are already `loading="lazy"`.
 
-## Approach
-1. Hand-scaffold SvelteKit 2.70 / Svelte 5.56 / TS on `@sveltejs/adapter-static` (no fallback), so `/` prerenders to real HTML.
-2. Port the export section by section — copy, type scale, spacing, colours verbatim — but translate its
-   **inline styles into scoped CSS classes**: media queries cannot override inline styles, which AC8 needs.
-   Design data quirks (Salary Day's `installs: "Board game"`) are preserved; the design is source of truth.
-3. Theme: tokens as CSS vars; the toggle flips `documentElement.dataset.theme` and writes `kamico-theme`.
-   The `app.html` inline script applies that key before first paint. Prerendered HTML ships dark, the default.
-4. Assets: rewrite every `play-lh.googleusercontent.com` URL to a local `/media/...` path, rendered as
-   `<img loading="lazy" decoding="async">` with `object-fit: cover` to keep the design's hard portrait crop.
-5. Responsive: `clamp()` fluid type (80px h1 → ~40px), padding 40px → 20px, every grid to one column at
-   ≤768px, hero blur orb sized in `%` and clipped, `overflow-x: clip` on the shell.
-
-## Verification (`scripts/verify.mjs` unless noted)
-- 1/2 `rm -rf node_modules && npm ci && npm run build` exits 0; `npm run check` reports 0 errors.
-- 3/9 Preview `/`: 200, zero console errors/pageerrors, zero failed responses, zero `play-lh` requests.
-- 4 Parse `build/index.html`: ids `top|games|numbers|studio|contact`; nav hrefs `["#games","#studio","#numbers","#contact"]`.
-- 5 Two cards, each with title + blurb + installs + exactly 3 chips, plus the two expected Play hrefs.
-- 6 Toggle flips `data-theme` and writes `localStorage['kamico-theme']`; reload with `light` seeded, sample `<html>` background at first paint — light, never `#0b0b0d`.
-- 7/8 At 1440×900 and 390×844 `scrollWidth <= innerWidth`; at 768px every `display:grid` node computes to a
-  single `grid-template-columns` track.
-- 10/11 Non-empty `<title>`, `meta[name=description]`, `og:title|description|image`; every referenced asset
-  (favicon, og:image, media) fetches 200 from preview; `git status design/` clean.
-- 12 `build/index.html` exists and contains the hero `<h1>` copy, not an empty SSR shell.
+## Verification (`npm run verify` — `build/` + preview on localhost:4173, no public URL)
+- **1/12** build exits 0, emits `build/index.html`; all pre-existing checks kept and passing. **2/3/13** canonical href and
+  `og:url` read out of `build/index.html` — not the hydrated DOM, which re-inserts head tags a crawler would never see —
+  and compared `=== SITE_URL` exactly.
+- **4** `og:image` asserted with `startsWith('https://')` on the raw attribute, never `new URL(…, origin)`; its 200 check maps
+  the `SITE_URL` prefix back to the preview origin (repairing the existing asset check).
+- **5** `og:image:width/height/alt` present; width/height compared against the dimensions `sips` reads off the file the tag
+  points at in `build/`, so the tags cannot drift from the artwork.
+- **6/7** `/robots.txt` + `/sitemap.xml` → 200 and byte-identical to the copies in `build/`; robots has `User-agent: *`,
+  `Allow: /`, no blanket `Disallow: /`, and `Sitemap: ${SITE_URL}/sitemap.xml`; sitemap parsed by in-page `DOMParser`,
+  exactly one `<loc>` = `SITE_URL`.
+- **8** exactly one `ld+json`; `JSON.parse`, then walk the graph for the Organization node and two `VideoGame` nodes each with
+  a name, a play.google.com URL and a rating field.
+- **9** sum of image-response `content-length` (fallback `response.buffer()`) at 1440x900 < 900 KB. **10/11** the browser
+  classifies each image against the fold and the `<img>` tags of `build/index.html`, in the same document order, carry the
+  verdict: the largest above-fold one has `fetchpriority="high"` and no `loading="lazy"`, every below-fold one is lazy.
+  **14** `artifacts/run-11/repro.cjs` (puppeteer-core driver) exits 0 against the same preview.

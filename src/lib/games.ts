@@ -4,6 +4,8 @@ export type Game = {
 	genre: string;
 	sessions: string;
 	rated: string;
+	/** The Play Store score, only on the titles that have collected one. */
+	rating?: { value: number; count: number };
 	blurb: string;
 	url: string;
 	icon: string;
@@ -18,11 +20,12 @@ export const games: Game[] = [
 		genre: 'Arcade',
 		sessions: 'Single player',
 		rated: 'Rated 7+',
+		rating: { value: 4.4, count: 200 },
 		blurb:
 			'A nostalgic revival of the 2D space shooter: stage bosses with their own weak points, power-ups, extra lives, and a mission objective on every stage.',
 		url: 'https://play.google.com/store/apps/details?id=com.kamico.si3',
 		icon: '/media/si3-icon.png',
-		shot: '/media/si3-shot.png'
+		shot: '/media/si3-shot.jpg'
 	},
 	{
 		title: 'Salary Day',
